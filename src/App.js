@@ -1,6 +1,6 @@
 import React from "react";
 import  ReactDOM from "react-dom";
-import Header from "./Header";
+
 import Body from "./Body";
 import { createBrowserRouter,RouterProvider,Outlet } from "react-router-dom";
 import Menu from "./Restmenu";
@@ -8,13 +8,17 @@ import About from "./About";
 import { Provider } from "react-redux";
 import store from "./store";
 import Cart from "./cart";
+import Header from "./Header";
+import Footer from "./Footer";
 const AppLayout=()=>(
    
 
 <Provider store={store}>
     <div className="bg-gradient-to-r from-green-200 via-blue-100 to-purple-200 min-h-screen">
-      <Header />
+       <Header/>
       <Outlet />
+      <Footer/>
+
     </div>
 
   </Provider>

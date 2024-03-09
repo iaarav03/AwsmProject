@@ -11,12 +11,21 @@ const Cart = () => {
   };
 
   console.log(cartitem);
+  if (cartitem.length === 0) {
+    return (
+      <div className='flex grow text-4xl min-h-[60vh] justify-center items-center'>
+        <p>Your cart is empty!</p>
+      </div>
+    );
+  }
   return (
     <>
        
       {cartitem.map((e) => (
+        <div className="">
+        
         <div
-          className="gradient-to-r from-green-200 via-blue-100 to-purple-200 rounded-lg shadow-xl p-4 flex flex-col justify-between"
+          className="md:w-10/12 gradient-to-r from-green-200 via-blue-100 to-purple-200 rounded-lg shadow-xl p-4 flex flex-col justify-between"
           key={e?.id}
         >
           <div>
@@ -49,6 +58,7 @@ const Cart = () => {
               Remove
             </button>
           </div>
+        </div>
         </div>
       ))}
     </>

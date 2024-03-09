@@ -9,7 +9,7 @@ const RestaurantCard = ({
     costForTwo,
   }) => {
     return (
-      <div className="bg-gradient-to-r from-green-200 via-blue-100 to-purple-200 p-4 shadow-lg rounded-lg flex flex-col w-70">
+      <div className="bg-gradient-to-r from-green-200 via-blue-100 to-purple-200 p-4 shadow-lg rounded-lg flex h-[380px] flex-wrap w-fit">
         <div className="h-48 overflow-hidden rounded-t-lg">
           <img
             className="w-full h-full object-cover"
@@ -40,4 +40,8 @@ const RestaurantCard = ({
   };
   
   export default RestaurantCard;
+  
+
+
+
   
