@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import RestaurantCard from "./Restaurentcard";
 import { Link } from "react-router-dom";
 import Shimmer from "./Shimmer";
+import MidBody from "./MidBody";
 
 const Body = () => {
   const [Allrest, setAllrest] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [Filterrest, setFilterrest] = useState([]);
+
 
   useEffect(() => {
     getRestaurants();
@@ -14,12 +16,16 @@ const Body = () => {
 
   async function getRestaurants() {
     try {
-      const response = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=26.912185&lng=75.783304&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING");
+      const response = await fetch(
+        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=26.912185&lng=75.783304&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+      );
       const json = await response.json();
 
       async function checkJsonData(jsonData) {
         for (let i = 0; i < jsonData?.data?.cards.length; i++) {
-          let checkData = json?.data?.cards[i]?.card?.card?.gridElements?.infoWithStyle?.restaurants;
+          let checkData =
+            json?.data?.cards[i]?.card?.card?.gridElements?.infoWithStyle
+              ?.restaurants;
           if (checkData !== undefined) {
             return checkData;
           }
@@ -29,7 +35,6 @@ const Body = () => {
       const resData = await checkJsonData(json);
       setAllrest(resData);
       setFilterrest(resData);
-
     } catch (error) {
       console.log(error);
     }
@@ -49,10 +54,13 @@ const Body = () => {
   };
 
   return Allrest.length === 0 ? (
-    <Shimmer />
+    <>
+      <Shimmer />
+    </>
   ) : (
     <>
-      <div className="flex justify-center items-center mt-6 space-x-3 ">
+      <MidBody />
+      <div className="flex justify-center items-center mt-6 md:mt-0 space-x-3  ">
         <div className="relative">
           <input
             type="text"
@@ -61,6 +69,7 @@ const Body = () => {
             value={searchText}
             onChange={handleSearchChange}
           />
+
           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
             <svg
               className="h-4 w-4 fill-current"
@@ -83,18 +92,18 @@ const Body = () => {
         </button>
       </div>
 
-      <div className="flex flex-wrap justify-center mt-10 -mx-2 ">
+      <div className="flex flex-wrap justify-center items-center mt-10   ">
         {Filterrest.map((restaurant) => (
-          <div className="lg:w-1/4 w-1/2 md:w-1/3 px-2 mb-4" key={restaurant?.info?.id}>
+          <div
+            className="lg:w-[20vw] w-[40vw] px-2 mb-4 "
+            key={restaurant?.info?.id}
+          >
             <Link to={"/restaurant/" + restaurant?.info?.id}>
               <RestaurantCard {...restaurant?.info} />
             </Link>
           </div>
         ))}
-        
-       
       </div>
-     
     </>
   );
 };
