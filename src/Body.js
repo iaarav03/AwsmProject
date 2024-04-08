@@ -61,10 +61,14 @@ const Body = () => {
   //   const formattedLng = user.lng.toFixed(4);
   
     try {
+<<<<<<< HEAD
       const response = await fetch(
         // `https://www.swiggy.com/dapi/restaurants/list/v5?lat=${user.lat}&lng=${user.lng}&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`
         `https://foodfire.onrender.com/api/restaurants?lat=${user.lat}&lng=${user.lng}&page_type=DESKTOP_WEB_LISTING`
       );
+=======
+      const response = await fetch("https://foodfire.onrender.com/api/restaurants?lat=21.1702401&lng=72.83106070000001&page_type=DESKTOP_WEB_LISTING");
+>>>>>>> a4af9bc1cdea60ac93feccba82dd22fd5f51944f
       const json = await response.json();
             
       async function checkJsonData(jsonData) {
