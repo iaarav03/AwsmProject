@@ -12,12 +12,22 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Restmenuu from "./RestmenuCard";
 import MidBody from "./MidBody";
+import UserContext from "./UseContext";
+import { useState } from "react";
 const AppLayout=()=>{
- 
+ const [user,setUser]=useState({
+  user:{
+    lat:null,
+    lng:null
+  }
+ })
 
 
   return (
- 
+ <UserContext.Provider value={{
+  user:user,
+  setUser:setUser,
+ }} >
 <Provider store={store}>
     
        <Header/>
@@ -28,7 +38,7 @@ const AppLayout=()=>{
 
   </Provider>
 
-
+</UserContext.Provider>
 
 );
 }

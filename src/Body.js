@@ -3,40 +3,91 @@ import RestaurantCard from "./Restaurentcard";
 import { Link } from "react-router-dom";
 import Shimmer from "./Shimmer";
 import MidBody from "./MidBody";
+import UserContext from "./UseContext";
+import { MdLocationOn } from "react-icons/md";
 
 const Body = () => {
   const [Allrest, setAllrest] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [Filterrest, setFilterrest] = useState([]);
 
+  const [status, setStatus] = useState(null);
+  const[loading,setLoading]=useState(true);
+  const {user,setUser}=useContext(UserContext);
 
+  console.log(user);
   useEffect(() => {
-    getRestaurants();
-  }, []);
+    getLocation();
+    // Ensure we only call getRestaurants if lat and lng are not null
+    if (user.lat && user.lng) {
+      getRestaurants();
+    }
+  },[user.lat,user.lng] );
+  
+  const getLocation = () => {
+    if (!navigator.geolocation) {
+      setStatus('Geolocation is not supported by your browser');
+    } else {
+      setStatus('Locating...');
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newLat = position.coords.latitude;
+          const newLng = position.coords.longitude;
+         
+          setUser({
+            lat:newLat,
+            lng:newLng
+          })
+          setStatus('Please wait as restaurent list is loading');
+         
+          // Call getRestaurants here after location is updated
+           // Make sure this function can handle the asynchronous setting of lat and lng
+        },
+        () => {
+          setStatus('Please Grant Permission');
+        }
+      );
+    }
+  };
 
   async function getRestaurants() {
+  //   if (user.lat == 1 || user.lng == 1) {
+  //     console.error("Latitude or longitude is not set.");
+  //     return;
+  //   }
+  // setLoading(true);
+  //   // Ensure we only have 4 digits after the decimal point
+  //   const formattedLat = user.lat.toFixed(4);
+  //   const formattedLng = user.lng.toFixed(4);
+  
     try {
       const response = await fetch(
-        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=26.912185&lng=75.783304&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+        // `https://www.swiggy.com/dapi/restaurants/list/v5?lat=${user.lat}&lng=${user.lng}&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`
+        `https://foodfire.onrender.com/api/restaurants?lat=${user.lat}&lng=${user.lng}&page_type=DESKTOP_WEB_LISTING`
       );
       const json = await response.json();
-
+            
       async function checkJsonData(jsonData) {
         for (let i = 0; i < jsonData?.data?.cards.length; i++) {
-          let checkData =
-            json?.data?.cards[i]?.card?.card?.gridElements?.infoWithStyle
-              ?.restaurants;
-          if (checkData !== undefined) {
-            return checkData;
-          }
+            let checkData =
+                jsonData?.data?.cards[i]?.card?.card?.gridElements?.infoWithStyle
+                    ?.restaurants;
+            if (Array.isArray(checkData)) { // Ensure checkData is an array
+                return checkData;
+            }
         }
-      }
+        return []; // Return an empty array if no restaurants found
+    }
+      
 
       const resData = await checkJsonData(json);
       setAllrest(resData);
       setFilterrest(resData);
+      console.log(Filterrest);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
 
@@ -53,9 +104,26 @@ const Body = () => {
     searchData(searchText, Allrest);
   };
 
-  return Allrest.length === 0 ? (
+  return Allrest.length === 0? (
     <>
-      <Shimmer />
+        
+      <div className="flex flex-row">
+      {/* <div
+      >
+ <h1 className="text-l ml-16 font-bold text-[#e21616]">Location access :  </h1>
+      </div> */}
+     
+      <div>
+ <button className="pl-1" onClick={getLocation}><MdLocationOn className="text-3xl "/></button>
+      </div>
+     
+      
+      <p className="text-l font-semibold font-serif text-[#8c0c57]">{status}...</p>
+   
+      {/* Rest of your JSX */}
+      
+    </div>
+    <Shimmer />
     </>
   ) : (
     <>

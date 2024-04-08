@@ -3,8 +3,8 @@ import { createContext } from "react";
 
 const UserContext = createContext({
   user: {
-    name: "arav",
-    email: "a@g.com",
+   lat:null,
+   lng:null,
   },
 });
 export default UserContext;

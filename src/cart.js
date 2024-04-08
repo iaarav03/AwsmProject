@@ -30,7 +30,7 @@ const Cart = () => {
   }
   return (
     <div className="md:flex flex-row">
-      <div className="w-1/2 pl-10 mt-7">
+      <div className="md:w-1/2 md:pl-10 md:mt-7">
         <ul className="basis-7/12">
           {cartitem &&
             cartitem.map((item) => {
@@ -108,7 +108,7 @@ const Cart = () => {
             })}
         </ul>
       </div>
-      <div className="w-[40vw]">
+      <div className="md:w-[40vw]">
         <OrderSummary />
       </div>
     </div>
